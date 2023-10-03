@@ -271,13 +271,15 @@ static isl_bool can_select(__isl_keep isl_basic_set *bset, int level,
 {
 	int i;
 	isl_bool indep;
-	unsigned ovar;
+	isl_size ovar;
 	struct isl_tab_undo *snap;
 
 	if (isl_tab_is_redundant(tab, level))
 		return isl_bool_false;
 
 	ovar = isl_space_offset(bset->dim, isl_dim_set);
+	if (ovar < 0)
+		return isl_bool_error;
 
 	indep = is_independent(facets, selected, bset->ineq[level] + 1 + ovar);
 	if (indep < 0 || !indep)
@@ -382,7 +384,7 @@ static __isl_give isl_basic_set *detect_implicit_equality_constraints(
  * We simply run through all combinations of d constraints,
  * with d the number of set variables, and check if those d constraints
  * define a vertex.  To avoid the generation of duplicate vertices,
- * which we may happen if a vertex is defined by more that d constraints,
+ * which may happen if a vertex is defined by more than d constraints,
  * we make sure we only generate the vertex for the d constraints with
  * smallest index.
  *
