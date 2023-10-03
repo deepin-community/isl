@@ -213,6 +213,32 @@ static void sol_free(struct isl_sol *sol)
 	free(sol);
 }
 
+/* Add equality constraint "eq" to the context of "sol".
+ * "check" is set if "eq" is not known to be a valid constraint.
+ * "update" is set if ineq_sign() may still get called on the context.
+ */
+static void sol_context_add_eq(struct isl_sol *sol, isl_int *eq, int check,
+	int update)
+{
+	sol->context->op->add_eq(sol->context, eq, check, update);
+	if (!sol->context->op->is_ok(sol->context))
+		sol->error = 1;
+}
+
+/* Add inequality constraint "ineq" to the context of "sol".
+ * "check" is set if "ineq" is not known to be a valid constraint.
+ * "update" is set if ineq_sign() may still get called on the context.
+ */
+static void sol_context_add_ineq(struct isl_sol *sol, isl_int *ineq, int check,
+	int update)
+{
+	if (sol->error)
+		return;
+	sol->context->op->add_ineq(sol->context, ineq, check, update);
+	if (!sol->context->op->is_ok(sol->context))
+		sol->error = 1;
+}
+
 /* Push a partial solution represented by a domain and function "ma"
  * onto the stack of partial solutions.
  * If "ma" is NULL, then "dom" represents a part of the domain
@@ -3929,13 +3955,14 @@ static void find_in_pos(struct isl_sol *sol, struct isl_tab *tab, isl_int *ineq)
 
 	if (!sol->context)
 		goto error;
-	saved = sol->context->op->save(sol->context);
 
 	tab = isl_tab_dup(tab);
 	if (!tab)
 		goto error;
 
-	sol->context->op->add_ineq(sol->context, ineq, 0, 1);
+	saved = sol->context->op->save(sol->context);
+
+	sol_context_add_ineq(sol, ineq, 0, 1);
 
 	find_solutions(sol, tab);
 
@@ -3963,9 +3990,7 @@ static void no_sol_in_strict(struct isl_sol *sol,
 
 	isl_int_sub_ui(ineq->el[0], ineq->el[0], 1);
 
-	sol->context->op->add_ineq(sol->context, ineq->el, 1, 0);
-	if (!sol->context)
-		goto error;
+	sol_context_add_ineq(sol, ineq->el, 1, 0);
 
 	empty = tab->empty;
 	tab->empty = 1;
@@ -3975,6 +4000,8 @@ static void no_sol_in_strict(struct isl_sol *sol,
 	isl_int_add_ui(ineq->el[0], ineq->el[0], 1);
 
 	sol->context->op->restore(sol->context, saved);
+	if (!sol->context->op->is_ok(sol->context))
+		goto error;
 	return;
 error:
 	sol->error = 1;
@@ -4144,8 +4171,7 @@ static void find_solutions(struct isl_sol *sol, struct isl_tab *tab)
 			tab->row_sign[split] = isl_tab_row_neg;
 			isl_seq_neg(ineq->el, ineq->el, ineq->size);
 			isl_int_sub_ui(ineq->el[0], ineq->el[0], 1);
-			if (!sol->error)
-				context->op->add_ineq(context, ineq->el, 0, 1);
+			sol_context_add_ineq(sol, ineq->el, 0, 1);
 			isl_vec_free(ineq);
 			if (sol->error)
 				goto error;
@@ -4180,7 +4206,7 @@ static void find_solutions(struct isl_sol *sol, struct isl_tab *tab)
 			sol_inc_level(sol);
 			no_sol_in_strict(sol, tab, ineq);
 			isl_seq_neg(ineq->el, ineq->el, ineq->size);
-			context->op->add_ineq(context, ineq->el, 1, 1);
+			sol_context_add_ineq(sol, ineq->el, 1, 1);
 			isl_vec_free(ineq);
 			if (sol->error || !context->op->is_ok(context))
 				goto error;
@@ -4278,7 +4304,7 @@ static void find_solutions_main(struct isl_sol *sol, struct isl_tab *tab)
 		no_sol_in_strict(sol, tab, eq);
 		isl_seq_neg(eq->el, eq->el, eq->size);
 
-		sol->context->op->add_eq(sol->context, eq->el, 1, 1);
+		sol_context_add_eq(sol, eq->el, 1, 1);
 
 		isl_vec_free(eq);
 
@@ -5934,7 +5960,7 @@ static __isl_give isl_pw_multi_aff *split_domain_pma(
 			pma = isl_pw_multi_aff_free(pma);
 		} else if (subs) {
 			pma = isl_pw_multi_aff_substitute(pma,
-					isl_dim_in, n_in - 1, min_expr_pa);
+					n_in - 1, min_expr_pa);
 		} else {
 			isl_bool split;
 			split = need_split_set(opt->p[i].set, cst);
