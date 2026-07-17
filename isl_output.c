@@ -1314,8 +1314,7 @@ static __isl_give isl_basic_map *drop_aff(__isl_take isl_basic_map *bmap,
 		goto error;
 
 	for (i = bmap->n_eq - 1; i >= 0; --i) {
-		if (isl_seq_first_non_zero(bmap->eq[i] + 1 + v_div,
-					    bmap->n_div) != -1)
+		if (isl_seq_any_non_zero(bmap->eq[i] + 1 + v_div, bmap->n_div))
 			continue;
 		for (j = 0; j < aff->n_eq; ++j) {
 			if (!isl_seq_eq(bmap->eq[i], aff->eq[j], 1 + v_div) &&
@@ -2755,6 +2754,14 @@ static __isl_give isl_printer *print_aff_isl(__isl_take isl_printer *p,
 error:
 	isl_printer_free(p);
 	return NULL;
+}
+
+/* Print dimension "pos" of data->space to "p" as a zero.
+ */
+static __isl_give isl_printer *print_dim_zero(__isl_take isl_printer *p,
+	struct isl_print_space_data *data, unsigned pos)
+{
+	return isl_printer_print_str(p, "0");
 }
 
 #undef BASE

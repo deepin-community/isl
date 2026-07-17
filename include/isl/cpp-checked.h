@@ -314,12 +314,12 @@ class aff {
   friend inline aff manage(__isl_take isl_aff *ptr);
   friend inline aff manage_copy(__isl_keep isl_aff *ptr);
 
-protected:
+ protected:
   isl_aff *ptr = nullptr;
 
   inline explicit aff(__isl_take isl_aff *ptr);
 
-public:
+ public:
   inline /* implicit */ aff();
   inline /* implicit */ aff(const aff &obj);
   inline explicit aff(isl::checked::ctx ctx, const std::string &str);
@@ -507,12 +507,12 @@ class aff_list {
   friend inline aff_list manage(__isl_take isl_aff_list *ptr);
   friend inline aff_list manage_copy(__isl_keep isl_aff_list *ptr);
 
-protected:
+ protected:
   isl_aff_list *ptr = nullptr;
 
   inline explicit aff_list(__isl_take isl_aff_list *ptr);
 
-public:
+ public:
   inline /* implicit */ aff_list();
   inline /* implicit */ aff_list(const aff_list &obj);
   inline explicit aff_list(isl::checked::ctx ctx, int n);
@@ -548,12 +548,12 @@ class ast_build {
   friend inline ast_build manage(__isl_take isl_ast_build *ptr);
   friend inline ast_build manage_copy(__isl_keep isl_ast_build *ptr);
 
-protected:
+ protected:
   isl_ast_build *ptr = nullptr;
 
   inline explicit ast_build(__isl_take isl_ast_build *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_build();
   inline /* implicit */ ast_build(const ast_build &obj);
   inline explicit ast_build(isl::checked::ctx ctx);
@@ -566,7 +566,7 @@ public:
   inline bool is_null() const;
   inline isl::checked::ctx ctx() const;
 
-private:
+ private:
   inline ast_build &copy_callbacks(const ast_build &obj);
   struct at_each_domain_data {
     std::function<isl::checked::ast_node(isl::checked::ast_node, isl::checked::ast_build)> func;
@@ -574,7 +574,7 @@ private:
   std::shared_ptr<at_each_domain_data> at_each_domain_data;
   static inline isl_ast_node *at_each_domain(isl_ast_node *arg_0, isl_ast_build *arg_1, void *arg_2);
   inline void set_at_each_domain_data(const std::function<isl::checked::ast_node(isl::checked::ast_node, isl::checked::ast_build)> &fn);
-public:
+ public:
   inline isl::checked::ast_build set_at_each_domain(const std::function<isl::checked::ast_node(isl::checked::ast_node, isl::checked::ast_build)> &fn) const;
   inline isl::checked::ast_expr access_from(isl::checked::multi_pw_aff mpa) const;
   inline isl::checked::ast_expr access_from(isl::checked::pw_multi_aff pma) const;
@@ -597,12 +597,12 @@ class ast_expr {
   friend inline ast_expr manage(__isl_take isl_ast_expr *ptr);
   friend inline ast_expr manage_copy(__isl_keep isl_ast_expr *ptr);
 
-protected:
+ protected:
   isl_ast_expr *ptr = nullptr;
 
   inline explicit ast_expr(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr();
   inline /* implicit */ ast_expr(const ast_expr &obj);
   inline ast_expr &operator=(ast_expr obj);
@@ -612,13 +612,13 @@ public:
   inline __isl_keep isl_ast_expr *get() const;
   inline __isl_give isl_ast_expr *release();
   inline bool is_null() const;
-private:
+ private:
   template <typename T,
           typename = typename std::enable_if<std::is_same<
                   const decltype(isl_ast_expr_get_type(NULL)),
                   const T>::value>::type>
   inline boolean isa_type(T subtype) const;
-public:
+ public:
   template <class T> inline boolean isa() const;
   template <class T> inline T as() const;
   inline isl::checked::ctx ctx() const;
@@ -634,10 +634,10 @@ class ast_expr_id : public ast_expr {
   friend ast_expr_id ast_expr::as<ast_expr_id>() const;
   static const auto type = isl_ast_expr_id;
 
-protected:
+ protected:
   inline explicit ast_expr_id(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_id();
   inline /* implicit */ ast_expr_id(const ast_expr_id &obj);
   inline ast_expr_id &operator=(ast_expr_id obj);
@@ -655,10 +655,10 @@ class ast_expr_int : public ast_expr {
   friend ast_expr_int ast_expr::as<ast_expr_int>() const;
   static const auto type = isl_ast_expr_int;
 
-protected:
+ protected:
   inline explicit ast_expr_int(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_int();
   inline /* implicit */ ast_expr_int(const ast_expr_int &obj);
   inline ast_expr_int &operator=(ast_expr_int obj);
@@ -676,20 +676,20 @@ class ast_expr_op : public ast_expr {
   friend ast_expr_op ast_expr::as<ast_expr_op>() const;
   static const auto type = isl_ast_expr_op;
 
-protected:
+ protected:
   inline explicit ast_expr_op(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op();
   inline /* implicit */ ast_expr_op(const ast_expr_op &obj);
   inline ast_expr_op &operator=(ast_expr_op obj);
-private:
+ private:
   template <typename T,
           typename = typename std::enable_if<std::is_same<
                   const decltype(isl_ast_expr_op_get_type(NULL)),
                   const T>::value>::type>
   inline boolean isa_type(T subtype) const;
-public:
+ public:
   template <class T> inline boolean isa() const;
   template <class T> inline T as() const;
   inline isl::checked::ctx ctx() const;
@@ -708,10 +708,10 @@ class ast_expr_op_access : public ast_expr_op {
   friend ast_expr_op_access ast_expr_op::as<ast_expr_op_access>() const;
   static const auto type = isl_ast_expr_op_access;
 
-protected:
+ protected:
   inline explicit ast_expr_op_access(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_access();
   inline /* implicit */ ast_expr_op_access(const ast_expr_op_access &obj);
   inline ast_expr_op_access &operator=(ast_expr_op_access obj);
@@ -727,10 +727,10 @@ class ast_expr_op_add : public ast_expr_op {
   friend ast_expr_op_add ast_expr_op::as<ast_expr_op_add>() const;
   static const auto type = isl_ast_expr_op_add;
 
-protected:
+ protected:
   inline explicit ast_expr_op_add(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_add();
   inline /* implicit */ ast_expr_op_add(const ast_expr_op_add &obj);
   inline ast_expr_op_add &operator=(ast_expr_op_add obj);
@@ -746,10 +746,10 @@ class ast_expr_op_address_of : public ast_expr_op {
   friend ast_expr_op_address_of ast_expr_op::as<ast_expr_op_address_of>() const;
   static const auto type = isl_ast_expr_op_address_of;
 
-protected:
+ protected:
   inline explicit ast_expr_op_address_of(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_address_of();
   inline /* implicit */ ast_expr_op_address_of(const ast_expr_op_address_of &obj);
   inline ast_expr_op_address_of &operator=(ast_expr_op_address_of obj);
@@ -765,10 +765,10 @@ class ast_expr_op_and : public ast_expr_op {
   friend ast_expr_op_and ast_expr_op::as<ast_expr_op_and>() const;
   static const auto type = isl_ast_expr_op_and;
 
-protected:
+ protected:
   inline explicit ast_expr_op_and(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_and();
   inline /* implicit */ ast_expr_op_and(const ast_expr_op_and &obj);
   inline ast_expr_op_and &operator=(ast_expr_op_and obj);
@@ -784,10 +784,10 @@ class ast_expr_op_and_then : public ast_expr_op {
   friend ast_expr_op_and_then ast_expr_op::as<ast_expr_op_and_then>() const;
   static const auto type = isl_ast_expr_op_and_then;
 
-protected:
+ protected:
   inline explicit ast_expr_op_and_then(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_and_then();
   inline /* implicit */ ast_expr_op_and_then(const ast_expr_op_and_then &obj);
   inline ast_expr_op_and_then &operator=(ast_expr_op_and_then obj);
@@ -803,10 +803,10 @@ class ast_expr_op_call : public ast_expr_op {
   friend ast_expr_op_call ast_expr_op::as<ast_expr_op_call>() const;
   static const auto type = isl_ast_expr_op_call;
 
-protected:
+ protected:
   inline explicit ast_expr_op_call(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_call();
   inline /* implicit */ ast_expr_op_call(const ast_expr_op_call &obj);
   inline ast_expr_op_call &operator=(ast_expr_op_call obj);
@@ -822,10 +822,10 @@ class ast_expr_op_cond : public ast_expr_op {
   friend ast_expr_op_cond ast_expr_op::as<ast_expr_op_cond>() const;
   static const auto type = isl_ast_expr_op_cond;
 
-protected:
+ protected:
   inline explicit ast_expr_op_cond(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_cond();
   inline /* implicit */ ast_expr_op_cond(const ast_expr_op_cond &obj);
   inline ast_expr_op_cond &operator=(ast_expr_op_cond obj);
@@ -841,10 +841,10 @@ class ast_expr_op_div : public ast_expr_op {
   friend ast_expr_op_div ast_expr_op::as<ast_expr_op_div>() const;
   static const auto type = isl_ast_expr_op_div;
 
-protected:
+ protected:
   inline explicit ast_expr_op_div(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_div();
   inline /* implicit */ ast_expr_op_div(const ast_expr_op_div &obj);
   inline ast_expr_op_div &operator=(ast_expr_op_div obj);
@@ -860,10 +860,10 @@ class ast_expr_op_eq : public ast_expr_op {
   friend ast_expr_op_eq ast_expr_op::as<ast_expr_op_eq>() const;
   static const auto type = isl_ast_expr_op_eq;
 
-protected:
+ protected:
   inline explicit ast_expr_op_eq(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_eq();
   inline /* implicit */ ast_expr_op_eq(const ast_expr_op_eq &obj);
   inline ast_expr_op_eq &operator=(ast_expr_op_eq obj);
@@ -879,10 +879,10 @@ class ast_expr_op_fdiv_q : public ast_expr_op {
   friend ast_expr_op_fdiv_q ast_expr_op::as<ast_expr_op_fdiv_q>() const;
   static const auto type = isl_ast_expr_op_fdiv_q;
 
-protected:
+ protected:
   inline explicit ast_expr_op_fdiv_q(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_fdiv_q();
   inline /* implicit */ ast_expr_op_fdiv_q(const ast_expr_op_fdiv_q &obj);
   inline ast_expr_op_fdiv_q &operator=(ast_expr_op_fdiv_q obj);
@@ -898,10 +898,10 @@ class ast_expr_op_ge : public ast_expr_op {
   friend ast_expr_op_ge ast_expr_op::as<ast_expr_op_ge>() const;
   static const auto type = isl_ast_expr_op_ge;
 
-protected:
+ protected:
   inline explicit ast_expr_op_ge(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_ge();
   inline /* implicit */ ast_expr_op_ge(const ast_expr_op_ge &obj);
   inline ast_expr_op_ge &operator=(ast_expr_op_ge obj);
@@ -917,10 +917,10 @@ class ast_expr_op_gt : public ast_expr_op {
   friend ast_expr_op_gt ast_expr_op::as<ast_expr_op_gt>() const;
   static const auto type = isl_ast_expr_op_gt;
 
-protected:
+ protected:
   inline explicit ast_expr_op_gt(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_gt();
   inline /* implicit */ ast_expr_op_gt(const ast_expr_op_gt &obj);
   inline ast_expr_op_gt &operator=(ast_expr_op_gt obj);
@@ -936,10 +936,10 @@ class ast_expr_op_le : public ast_expr_op {
   friend ast_expr_op_le ast_expr_op::as<ast_expr_op_le>() const;
   static const auto type = isl_ast_expr_op_le;
 
-protected:
+ protected:
   inline explicit ast_expr_op_le(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_le();
   inline /* implicit */ ast_expr_op_le(const ast_expr_op_le &obj);
   inline ast_expr_op_le &operator=(ast_expr_op_le obj);
@@ -955,10 +955,10 @@ class ast_expr_op_lt : public ast_expr_op {
   friend ast_expr_op_lt ast_expr_op::as<ast_expr_op_lt>() const;
   static const auto type = isl_ast_expr_op_lt;
 
-protected:
+ protected:
   inline explicit ast_expr_op_lt(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_lt();
   inline /* implicit */ ast_expr_op_lt(const ast_expr_op_lt &obj);
   inline ast_expr_op_lt &operator=(ast_expr_op_lt obj);
@@ -974,10 +974,10 @@ class ast_expr_op_max : public ast_expr_op {
   friend ast_expr_op_max ast_expr_op::as<ast_expr_op_max>() const;
   static const auto type = isl_ast_expr_op_max;
 
-protected:
+ protected:
   inline explicit ast_expr_op_max(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_max();
   inline /* implicit */ ast_expr_op_max(const ast_expr_op_max &obj);
   inline ast_expr_op_max &operator=(ast_expr_op_max obj);
@@ -993,10 +993,10 @@ class ast_expr_op_member : public ast_expr_op {
   friend ast_expr_op_member ast_expr_op::as<ast_expr_op_member>() const;
   static const auto type = isl_ast_expr_op_member;
 
-protected:
+ protected:
   inline explicit ast_expr_op_member(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_member();
   inline /* implicit */ ast_expr_op_member(const ast_expr_op_member &obj);
   inline ast_expr_op_member &operator=(ast_expr_op_member obj);
@@ -1012,10 +1012,10 @@ class ast_expr_op_min : public ast_expr_op {
   friend ast_expr_op_min ast_expr_op::as<ast_expr_op_min>() const;
   static const auto type = isl_ast_expr_op_min;
 
-protected:
+ protected:
   inline explicit ast_expr_op_min(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_min();
   inline /* implicit */ ast_expr_op_min(const ast_expr_op_min &obj);
   inline ast_expr_op_min &operator=(ast_expr_op_min obj);
@@ -1031,10 +1031,10 @@ class ast_expr_op_minus : public ast_expr_op {
   friend ast_expr_op_minus ast_expr_op::as<ast_expr_op_minus>() const;
   static const auto type = isl_ast_expr_op_minus;
 
-protected:
+ protected:
   inline explicit ast_expr_op_minus(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_minus();
   inline /* implicit */ ast_expr_op_minus(const ast_expr_op_minus &obj);
   inline ast_expr_op_minus &operator=(ast_expr_op_minus obj);
@@ -1050,10 +1050,10 @@ class ast_expr_op_mul : public ast_expr_op {
   friend ast_expr_op_mul ast_expr_op::as<ast_expr_op_mul>() const;
   static const auto type = isl_ast_expr_op_mul;
 
-protected:
+ protected:
   inline explicit ast_expr_op_mul(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_mul();
   inline /* implicit */ ast_expr_op_mul(const ast_expr_op_mul &obj);
   inline ast_expr_op_mul &operator=(ast_expr_op_mul obj);
@@ -1069,10 +1069,10 @@ class ast_expr_op_or : public ast_expr_op {
   friend ast_expr_op_or ast_expr_op::as<ast_expr_op_or>() const;
   static const auto type = isl_ast_expr_op_or;
 
-protected:
+ protected:
   inline explicit ast_expr_op_or(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_or();
   inline /* implicit */ ast_expr_op_or(const ast_expr_op_or &obj);
   inline ast_expr_op_or &operator=(ast_expr_op_or obj);
@@ -1088,10 +1088,10 @@ class ast_expr_op_or_else : public ast_expr_op {
   friend ast_expr_op_or_else ast_expr_op::as<ast_expr_op_or_else>() const;
   static const auto type = isl_ast_expr_op_or_else;
 
-protected:
+ protected:
   inline explicit ast_expr_op_or_else(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_or_else();
   inline /* implicit */ ast_expr_op_or_else(const ast_expr_op_or_else &obj);
   inline ast_expr_op_or_else &operator=(ast_expr_op_or_else obj);
@@ -1107,10 +1107,10 @@ class ast_expr_op_pdiv_q : public ast_expr_op {
   friend ast_expr_op_pdiv_q ast_expr_op::as<ast_expr_op_pdiv_q>() const;
   static const auto type = isl_ast_expr_op_pdiv_q;
 
-protected:
+ protected:
   inline explicit ast_expr_op_pdiv_q(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_pdiv_q();
   inline /* implicit */ ast_expr_op_pdiv_q(const ast_expr_op_pdiv_q &obj);
   inline ast_expr_op_pdiv_q &operator=(ast_expr_op_pdiv_q obj);
@@ -1126,10 +1126,10 @@ class ast_expr_op_pdiv_r : public ast_expr_op {
   friend ast_expr_op_pdiv_r ast_expr_op::as<ast_expr_op_pdiv_r>() const;
   static const auto type = isl_ast_expr_op_pdiv_r;
 
-protected:
+ protected:
   inline explicit ast_expr_op_pdiv_r(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_pdiv_r();
   inline /* implicit */ ast_expr_op_pdiv_r(const ast_expr_op_pdiv_r &obj);
   inline ast_expr_op_pdiv_r &operator=(ast_expr_op_pdiv_r obj);
@@ -1145,10 +1145,10 @@ class ast_expr_op_select : public ast_expr_op {
   friend ast_expr_op_select ast_expr_op::as<ast_expr_op_select>() const;
   static const auto type = isl_ast_expr_op_select;
 
-protected:
+ protected:
   inline explicit ast_expr_op_select(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_select();
   inline /* implicit */ ast_expr_op_select(const ast_expr_op_select &obj);
   inline ast_expr_op_select &operator=(ast_expr_op_select obj);
@@ -1164,10 +1164,10 @@ class ast_expr_op_sub : public ast_expr_op {
   friend ast_expr_op_sub ast_expr_op::as<ast_expr_op_sub>() const;
   static const auto type = isl_ast_expr_op_sub;
 
-protected:
+ protected:
   inline explicit ast_expr_op_sub(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_sub();
   inline /* implicit */ ast_expr_op_sub(const ast_expr_op_sub &obj);
   inline ast_expr_op_sub &operator=(ast_expr_op_sub obj);
@@ -1183,10 +1183,10 @@ class ast_expr_op_zdiv_r : public ast_expr_op {
   friend ast_expr_op_zdiv_r ast_expr_op::as<ast_expr_op_zdiv_r>() const;
   static const auto type = isl_ast_expr_op_zdiv_r;
 
-protected:
+ protected:
   inline explicit ast_expr_op_zdiv_r(__isl_take isl_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_expr_op_zdiv_r();
   inline /* implicit */ ast_expr_op_zdiv_r(const ast_expr_op_zdiv_r &obj);
   inline ast_expr_op_zdiv_r &operator=(ast_expr_op_zdiv_r obj);
@@ -1202,12 +1202,12 @@ class ast_node {
   friend inline ast_node manage(__isl_take isl_ast_node *ptr);
   friend inline ast_node manage_copy(__isl_keep isl_ast_node *ptr);
 
-protected:
+ protected:
   isl_ast_node *ptr = nullptr;
 
   inline explicit ast_node(__isl_take isl_ast_node *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_node();
   inline /* implicit */ ast_node(const ast_node &obj);
   inline ast_node &operator=(ast_node obj);
@@ -1217,13 +1217,13 @@ public:
   inline __isl_keep isl_ast_node *get() const;
   inline __isl_give isl_ast_node *release();
   inline bool is_null() const;
-private:
+ private:
   template <typename T,
           typename = typename std::enable_if<std::is_same<
                   const decltype(isl_ast_node_get_type(NULL)),
                   const T>::value>::type>
   inline boolean isa_type(T subtype) const;
-public:
+ public:
   template <class T> inline boolean isa() const;
   template <class T> inline T as() const;
   inline isl::checked::ctx ctx() const;
@@ -1241,10 +1241,10 @@ class ast_node_block : public ast_node {
   friend ast_node_block ast_node::as<ast_node_block>() const;
   static const auto type = isl_ast_node_block;
 
-protected:
+ protected:
   inline explicit ast_node_block(__isl_take isl_ast_node *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_node_block();
   inline /* implicit */ ast_node_block(const ast_node_block &obj);
   inline explicit ast_node_block(isl::checked::ast_node_list list);
@@ -1263,10 +1263,10 @@ class ast_node_for : public ast_node {
   friend ast_node_for ast_node::as<ast_node_for>() const;
   static const auto type = isl_ast_node_for;
 
-protected:
+ protected:
   inline explicit ast_node_for(__isl_take isl_ast_node *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_node_for();
   inline /* implicit */ ast_node_for(const ast_node_for &obj);
   inline ast_node_for &operator=(ast_node_for obj);
@@ -1293,10 +1293,10 @@ class ast_node_if : public ast_node {
   friend ast_node_if ast_node::as<ast_node_if>() const;
   static const auto type = isl_ast_node_if;
 
-protected:
+ protected:
   inline explicit ast_node_if(__isl_take isl_ast_node *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_node_if();
   inline /* implicit */ ast_node_if(const ast_node_if &obj);
   inline ast_node_if &operator=(ast_node_if obj);
@@ -1319,12 +1319,12 @@ class ast_node_list {
   friend inline ast_node_list manage(__isl_take isl_ast_node_list *ptr);
   friend inline ast_node_list manage_copy(__isl_keep isl_ast_node_list *ptr);
 
-protected:
+ protected:
   isl_ast_node_list *ptr = nullptr;
 
   inline explicit ast_node_list(__isl_take isl_ast_node_list *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_node_list();
   inline /* implicit */ ast_node_list(const ast_node_list &obj);
   inline explicit ast_node_list(isl::checked::ctx ctx, int n);
@@ -1359,10 +1359,10 @@ class ast_node_mark : public ast_node {
   friend ast_node_mark ast_node::as<ast_node_mark>() const;
   static const auto type = isl_ast_node_mark;
 
-protected:
+ protected:
   inline explicit ast_node_mark(__isl_take isl_ast_node *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_node_mark();
   inline /* implicit */ ast_node_mark(const ast_node_mark &obj);
   inline ast_node_mark &operator=(ast_node_mark obj);
@@ -1382,10 +1382,10 @@ class ast_node_user : public ast_node {
   friend ast_node_user ast_node::as<ast_node_user>() const;
   static const auto type = isl_ast_node_user;
 
-protected:
+ protected:
   inline explicit ast_node_user(__isl_take isl_ast_node *ptr);
 
-public:
+ public:
   inline /* implicit */ ast_node_user();
   inline /* implicit */ ast_node_user(const ast_node_user &obj);
   inline explicit ast_node_user(isl::checked::ast_expr expr);
@@ -1404,12 +1404,12 @@ class basic_map {
   friend inline basic_map manage(__isl_take isl_basic_map *ptr);
   friend inline basic_map manage_copy(__isl_keep isl_basic_map *ptr);
 
-protected:
+ protected:
   isl_basic_map *ptr = nullptr;
 
   inline explicit basic_map(__isl_take isl_basic_map *ptr);
 
-public:
+ public:
   inline /* implicit */ basic_map();
   inline /* implicit */ basic_map(const basic_map &obj);
   inline explicit basic_map(isl::checked::ctx ctx, const std::string &str);
@@ -1488,7 +1488,9 @@ public:
   inline isl::checked::union_map intersect_domain_factor_range(const isl::checked::union_map &factor) const;
   inline isl::checked::map intersect_domain_wrapped_domain(const isl::checked::set &domain) const;
   inline isl::checked::union_map intersect_domain_wrapped_domain(const isl::checked::union_set &domain) const;
+  inline isl::checked::basic_map intersect_params(isl::checked::basic_set bset) const;
   inline isl::checked::map intersect_params(const isl::checked::set &params) const;
+  inline isl::checked::basic_map intersect_params(const isl::checked::point &bset) const;
   inline isl::checked::basic_map intersect_range(isl::checked::basic_set bset) const;
   inline isl::checked::map intersect_range(const isl::checked::set &set) const;
   inline isl::checked::union_map intersect_range(const isl::checked::space &space) const;
@@ -1585,12 +1587,12 @@ class basic_set {
   friend inline basic_set manage(__isl_take isl_basic_set *ptr);
   friend inline basic_set manage_copy(__isl_keep isl_basic_set *ptr);
 
-protected:
+ protected:
   isl_basic_set *ptr = nullptr;
 
   inline explicit basic_set(__isl_take isl_basic_set *ptr);
 
-public:
+ public:
   inline /* implicit */ basic_set();
   inline /* implicit */ basic_set(const basic_set &obj);
   inline /* implicit */ basic_set(isl::checked::point pnt);
@@ -1719,12 +1721,12 @@ class fixed_box {
   friend inline fixed_box manage(__isl_take isl_fixed_box *ptr);
   friend inline fixed_box manage_copy(__isl_keep isl_fixed_box *ptr);
 
-protected:
+ protected:
   isl_fixed_box *ptr = nullptr;
 
   inline explicit fixed_box(__isl_take isl_fixed_box *ptr);
 
-public:
+ public:
   inline /* implicit */ fixed_box();
   inline /* implicit */ fixed_box(const fixed_box &obj);
   inline explicit fixed_box(isl::checked::ctx ctx, const std::string &str);
@@ -1754,12 +1756,12 @@ class id {
   friend inline id manage(__isl_take isl_id *ptr);
   friend inline id manage_copy(__isl_keep isl_id *ptr);
 
-protected:
+ protected:
   isl_id *ptr = nullptr;
 
   inline explicit id(__isl_take isl_id *ptr);
 
-public:
+ public:
   inline /* implicit */ id();
   inline /* implicit */ id(const id &obj);
   inline explicit id(isl::checked::ctx ctx, const std::string &str);
@@ -1793,12 +1795,12 @@ class id_list {
   friend inline id_list manage(__isl_take isl_id_list *ptr);
   friend inline id_list manage_copy(__isl_keep isl_id_list *ptr);
 
-protected:
+ protected:
   isl_id_list *ptr = nullptr;
 
   inline explicit id_list(__isl_take isl_id_list *ptr);
 
-public:
+ public:
   inline /* implicit */ id_list();
   inline /* implicit */ id_list(const id_list &obj);
   inline explicit id_list(isl::checked::ctx ctx, int n);
@@ -1837,12 +1839,12 @@ class id_to_ast_expr {
   friend inline id_to_ast_expr manage(__isl_take isl_id_to_ast_expr *ptr);
   friend inline id_to_ast_expr manage_copy(__isl_keep isl_id_to_ast_expr *ptr);
 
-protected:
+ protected:
   isl_id_to_ast_expr *ptr = nullptr;
 
   inline explicit id_to_ast_expr(__isl_take isl_id_to_ast_expr *ptr);
 
-public:
+ public:
   inline /* implicit */ id_to_ast_expr();
   inline /* implicit */ id_to_ast_expr(const id_to_ast_expr &obj);
   inline explicit id_to_ast_expr(isl::checked::ctx ctx, int min_size);
@@ -1869,12 +1871,12 @@ class id_to_id {
   friend inline id_to_id manage(__isl_take isl_id_to_id *ptr);
   friend inline id_to_id manage_copy(__isl_keep isl_id_to_id *ptr);
 
-protected:
+ protected:
   isl_id_to_id *ptr = nullptr;
 
   inline explicit id_to_id(__isl_take isl_id_to_id *ptr);
 
-public:
+ public:
   inline /* implicit */ id_to_id();
   inline /* implicit */ id_to_id(const id_to_id &obj);
   inline explicit id_to_id(isl::checked::ctx ctx, int min_size);
@@ -1903,12 +1905,12 @@ class map {
   friend inline map manage(__isl_take isl_map *ptr);
   friend inline map manage_copy(__isl_keep isl_map *ptr);
 
-protected:
+ protected:
   isl_map *ptr = nullptr;
 
   inline explicit map(__isl_take isl_map *ptr);
 
-public:
+ public:
   inline /* implicit */ map();
   inline /* implicit */ map(const map &obj);
   inline /* implicit */ map(isl::checked::basic_map bmap);
@@ -2112,12 +2114,12 @@ class map_list {
   friend inline map_list manage(__isl_take isl_map_list *ptr);
   friend inline map_list manage_copy(__isl_keep isl_map_list *ptr);
 
-protected:
+ protected:
   isl_map_list *ptr = nullptr;
 
   inline explicit map_list(__isl_take isl_map_list *ptr);
 
-public:
+ public:
   inline /* implicit */ map_list();
   inline /* implicit */ map_list(const map_list &obj);
   inline explicit map_list(isl::checked::ctx ctx, int n);
@@ -2153,12 +2155,12 @@ class multi_aff {
   friend inline multi_aff manage(__isl_take isl_multi_aff *ptr);
   friend inline multi_aff manage_copy(__isl_keep isl_multi_aff *ptr);
 
-protected:
+ protected:
   isl_multi_aff *ptr = nullptr;
 
   inline explicit multi_aff(__isl_take isl_multi_aff *ptr);
 
-public:
+ public:
   inline /* implicit */ multi_aff();
   inline /* implicit */ multi_aff(const multi_aff &obj);
   inline /* implicit */ multi_aff(isl::checked::aff aff);
@@ -2316,12 +2318,12 @@ class multi_id {
   friend inline multi_id manage(__isl_take isl_multi_id *ptr);
   friend inline multi_id manage_copy(__isl_keep isl_multi_id *ptr);
 
-protected:
+ protected:
   isl_multi_id *ptr = nullptr;
 
   inline explicit multi_id(__isl_take isl_multi_id *ptr);
 
-public:
+ public:
   inline /* implicit */ multi_id();
   inline /* implicit */ multi_id(const multi_id &obj);
   inline explicit multi_id(isl::checked::space space, isl::checked::id_list list);
@@ -2357,12 +2359,12 @@ class multi_pw_aff {
   friend inline multi_pw_aff manage(__isl_take isl_multi_pw_aff *ptr);
   friend inline multi_pw_aff manage_copy(__isl_keep isl_multi_pw_aff *ptr);
 
-protected:
+ protected:
   isl_multi_pw_aff *ptr = nullptr;
 
   inline explicit multi_pw_aff(__isl_take isl_multi_pw_aff *ptr);
 
-public:
+ public:
   inline /* implicit */ multi_pw_aff();
   inline /* implicit */ multi_pw_aff(const multi_pw_aff &obj);
   inline /* implicit */ multi_pw_aff(isl::checked::aff aff);
@@ -2489,12 +2491,12 @@ class multi_union_pw_aff {
   friend inline multi_union_pw_aff manage(__isl_take isl_multi_union_pw_aff *ptr);
   friend inline multi_union_pw_aff manage_copy(__isl_keep isl_multi_union_pw_aff *ptr);
 
-protected:
+ protected:
   isl_multi_union_pw_aff *ptr = nullptr;
 
   inline explicit multi_union_pw_aff(__isl_take isl_multi_union_pw_aff *ptr);
 
-public:
+ public:
   inline /* implicit */ multi_union_pw_aff();
   inline /* implicit */ multi_union_pw_aff(const multi_union_pw_aff &obj);
   inline /* implicit */ multi_union_pw_aff(isl::checked::multi_pw_aff mpa);
@@ -2557,12 +2559,12 @@ class multi_val {
   friend inline multi_val manage(__isl_take isl_multi_val *ptr);
   friend inline multi_val manage_copy(__isl_keep isl_multi_val *ptr);
 
-protected:
+ protected:
   isl_multi_val *ptr = nullptr;
 
   inline explicit multi_val(__isl_take isl_multi_val *ptr);
 
-public:
+ public:
   inline /* implicit */ multi_val();
   inline /* implicit */ multi_val(const multi_val &obj);
   inline explicit multi_val(isl::checked::space space, isl::checked::val_list list);
@@ -2620,12 +2622,12 @@ class point {
   friend inline point manage(__isl_take isl_point *ptr);
   friend inline point manage_copy(__isl_keep isl_point *ptr);
 
-protected:
+ protected:
   isl_point *ptr = nullptr;
 
   inline explicit point(__isl_take isl_point *ptr);
 
-public:
+ public:
   inline /* implicit */ point();
   inline /* implicit */ point(const point &obj);
   inline point &operator=(point obj);
@@ -2748,12 +2750,12 @@ class pw_aff {
   friend inline pw_aff manage(__isl_take isl_pw_aff *ptr);
   friend inline pw_aff manage_copy(__isl_keep isl_pw_aff *ptr);
 
-protected:
+ protected:
   isl_pw_aff *ptr = nullptr;
 
   inline explicit pw_aff(__isl_take isl_pw_aff *ptr);
 
-public:
+ public:
   inline /* implicit */ pw_aff();
   inline /* implicit */ pw_aff(const pw_aff &obj);
   inline /* implicit */ pw_aff(isl::checked::aff aff);
@@ -2928,12 +2930,12 @@ class pw_aff_list {
   friend inline pw_aff_list manage(__isl_take isl_pw_aff_list *ptr);
   friend inline pw_aff_list manage_copy(__isl_keep isl_pw_aff_list *ptr);
 
-protected:
+ protected:
   isl_pw_aff_list *ptr = nullptr;
 
   inline explicit pw_aff_list(__isl_take isl_pw_aff_list *ptr);
 
-public:
+ public:
   inline /* implicit */ pw_aff_list();
   inline /* implicit */ pw_aff_list(const pw_aff_list &obj);
   inline explicit pw_aff_list(isl::checked::ctx ctx, int n);
@@ -2969,12 +2971,12 @@ class pw_multi_aff {
   friend inline pw_multi_aff manage(__isl_take isl_pw_multi_aff *ptr);
   friend inline pw_multi_aff manage_copy(__isl_keep isl_pw_multi_aff *ptr);
 
-protected:
+ protected:
   isl_pw_multi_aff *ptr = nullptr;
 
   inline explicit pw_multi_aff(__isl_take isl_pw_multi_aff *ptr);
 
-public:
+ public:
   inline /* implicit */ pw_multi_aff();
   inline /* implicit */ pw_multi_aff(const pw_multi_aff &obj);
   inline /* implicit */ pw_multi_aff(isl::checked::multi_aff ma);
@@ -3132,12 +3134,12 @@ class pw_multi_aff_list {
   friend inline pw_multi_aff_list manage(__isl_take isl_pw_multi_aff_list *ptr);
   friend inline pw_multi_aff_list manage_copy(__isl_keep isl_pw_multi_aff_list *ptr);
 
-protected:
+ protected:
   isl_pw_multi_aff_list *ptr = nullptr;
 
   inline explicit pw_multi_aff_list(__isl_take isl_pw_multi_aff_list *ptr);
 
-public:
+ public:
   inline /* implicit */ pw_multi_aff_list();
   inline /* implicit */ pw_multi_aff_list(const pw_multi_aff_list &obj);
   inline explicit pw_multi_aff_list(isl::checked::ctx ctx, int n);
@@ -3173,12 +3175,12 @@ class schedule {
   friend inline schedule manage(__isl_take isl_schedule *ptr);
   friend inline schedule manage_copy(__isl_keep isl_schedule *ptr);
 
-protected:
+ protected:
   isl_schedule *ptr = nullptr;
 
   inline explicit schedule(__isl_take isl_schedule *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule();
   inline /* implicit */ schedule(const schedule &obj);
   inline explicit schedule(isl::checked::ctx ctx, const std::string &str);
@@ -3209,12 +3211,12 @@ class schedule_constraints {
   friend inline schedule_constraints manage(__isl_take isl_schedule_constraints *ptr);
   friend inline schedule_constraints manage_copy(__isl_keep isl_schedule_constraints *ptr);
 
-protected:
+ protected:
   isl_schedule_constraints *ptr = nullptr;
 
   inline explicit schedule_constraints(__isl_take isl_schedule_constraints *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_constraints();
   inline /* implicit */ schedule_constraints(const schedule_constraints &obj);
   inline explicit schedule_constraints(isl::checked::ctx ctx, const std::string &str);
@@ -3258,12 +3260,12 @@ class schedule_node {
   friend inline schedule_node manage(__isl_take isl_schedule_node *ptr);
   friend inline schedule_node manage_copy(__isl_keep isl_schedule_node *ptr);
 
-protected:
+ protected:
   isl_schedule_node *ptr = nullptr;
 
   inline explicit schedule_node(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node();
   inline /* implicit */ schedule_node(const schedule_node &obj);
   inline schedule_node &operator=(schedule_node obj);
@@ -3273,13 +3275,13 @@ public:
   inline __isl_keep isl_schedule_node *get() const;
   inline __isl_give isl_schedule_node *release();
   inline bool is_null() const;
-private:
+ private:
   template <typename T,
           typename = typename std::enable_if<std::is_same<
                   const decltype(isl_schedule_node_get_type(NULL)),
                   const T>::value>::type>
   inline boolean isa_type(T subtype) const;
-public:
+ public:
   template <class T> inline boolean isa() const;
   template <class T> inline T as() const;
   inline isl::checked::ctx ctx() const;
@@ -3342,10 +3344,10 @@ class schedule_node_band : public schedule_node {
   friend schedule_node_band schedule_node::as<schedule_node_band>() const;
   static const auto type = isl_schedule_node_band;
 
-protected:
+ protected:
   inline explicit schedule_node_band(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_band();
   inline /* implicit */ schedule_node_band(const schedule_node_band &obj);
   inline schedule_node_band &operator=(schedule_node_band obj);
@@ -3384,10 +3386,10 @@ class schedule_node_context : public schedule_node {
   friend schedule_node_context schedule_node::as<schedule_node_context>() const;
   static const auto type = isl_schedule_node_context;
 
-protected:
+ protected:
   inline explicit schedule_node_context(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_context();
   inline /* implicit */ schedule_node_context(const schedule_node_context &obj);
   inline schedule_node_context &operator=(schedule_node_context obj);
@@ -3405,10 +3407,10 @@ class schedule_node_domain : public schedule_node {
   friend schedule_node_domain schedule_node::as<schedule_node_domain>() const;
   static const auto type = isl_schedule_node_domain;
 
-protected:
+ protected:
   inline explicit schedule_node_domain(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_domain();
   inline /* implicit */ schedule_node_domain(const schedule_node_domain &obj);
   inline schedule_node_domain &operator=(schedule_node_domain obj);
@@ -3426,10 +3428,10 @@ class schedule_node_expansion : public schedule_node {
   friend schedule_node_expansion schedule_node::as<schedule_node_expansion>() const;
   static const auto type = isl_schedule_node_expansion;
 
-protected:
+ protected:
   inline explicit schedule_node_expansion(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_expansion();
   inline /* implicit */ schedule_node_expansion(const schedule_node_expansion &obj);
   inline schedule_node_expansion &operator=(schedule_node_expansion obj);
@@ -3449,10 +3451,10 @@ class schedule_node_extension : public schedule_node {
   friend schedule_node_extension schedule_node::as<schedule_node_extension>() const;
   static const auto type = isl_schedule_node_extension;
 
-protected:
+ protected:
   inline explicit schedule_node_extension(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_extension();
   inline /* implicit */ schedule_node_extension(const schedule_node_extension &obj);
   inline schedule_node_extension &operator=(schedule_node_extension obj);
@@ -3470,10 +3472,10 @@ class schedule_node_filter : public schedule_node {
   friend schedule_node_filter schedule_node::as<schedule_node_filter>() const;
   static const auto type = isl_schedule_node_filter;
 
-protected:
+ protected:
   inline explicit schedule_node_filter(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_filter();
   inline /* implicit */ schedule_node_filter(const schedule_node_filter &obj);
   inline schedule_node_filter &operator=(schedule_node_filter obj);
@@ -3491,10 +3493,10 @@ class schedule_node_guard : public schedule_node {
   friend schedule_node_guard schedule_node::as<schedule_node_guard>() const;
   static const auto type = isl_schedule_node_guard;
 
-protected:
+ protected:
   inline explicit schedule_node_guard(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_guard();
   inline /* implicit */ schedule_node_guard(const schedule_node_guard &obj);
   inline schedule_node_guard &operator=(schedule_node_guard obj);
@@ -3512,10 +3514,10 @@ class schedule_node_leaf : public schedule_node {
   friend schedule_node_leaf schedule_node::as<schedule_node_leaf>() const;
   static const auto type = isl_schedule_node_leaf;
 
-protected:
+ protected:
   inline explicit schedule_node_leaf(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_leaf();
   inline /* implicit */ schedule_node_leaf(const schedule_node_leaf &obj);
   inline schedule_node_leaf &operator=(schedule_node_leaf obj);
@@ -3531,10 +3533,10 @@ class schedule_node_mark : public schedule_node {
   friend schedule_node_mark schedule_node::as<schedule_node_mark>() const;
   static const auto type = isl_schedule_node_mark;
 
-protected:
+ protected:
   inline explicit schedule_node_mark(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_mark();
   inline /* implicit */ schedule_node_mark(const schedule_node_mark &obj);
   inline schedule_node_mark &operator=(schedule_node_mark obj);
@@ -3550,10 +3552,10 @@ class schedule_node_sequence : public schedule_node {
   friend schedule_node_sequence schedule_node::as<schedule_node_sequence>() const;
   static const auto type = isl_schedule_node_sequence;
 
-protected:
+ protected:
   inline explicit schedule_node_sequence(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_sequence();
   inline /* implicit */ schedule_node_sequence(const schedule_node_sequence &obj);
   inline schedule_node_sequence &operator=(schedule_node_sequence obj);
@@ -3569,10 +3571,10 @@ class schedule_node_set : public schedule_node {
   friend schedule_node_set schedule_node::as<schedule_node_set>() const;
   static const auto type = isl_schedule_node_set;
 
-protected:
+ protected:
   inline explicit schedule_node_set(__isl_take isl_schedule_node *ptr);
 
-public:
+ public:
   inline /* implicit */ schedule_node_set();
   inline /* implicit */ schedule_node_set(const schedule_node_set &obj);
   inline schedule_node_set &operator=(schedule_node_set obj);
@@ -3588,12 +3590,12 @@ class set {
   friend inline set manage(__isl_take isl_set *ptr);
   friend inline set manage_copy(__isl_keep isl_set *ptr);
 
-protected:
+ protected:
   isl_set *ptr = nullptr;
 
   inline explicit set(__isl_take isl_set *ptr);
 
-public:
+ public:
   inline /* implicit */ set();
   inline /* implicit */ set(const set &obj);
   inline /* implicit */ set(isl::checked::basic_set bset);
@@ -3733,12 +3735,12 @@ class set_list {
   friend inline set_list manage(__isl_take isl_set_list *ptr);
   friend inline set_list manage_copy(__isl_keep isl_set_list *ptr);
 
-protected:
+ protected:
   isl_set_list *ptr = nullptr;
 
   inline explicit set_list(__isl_take isl_set_list *ptr);
 
-public:
+ public:
   inline /* implicit */ set_list();
   inline /* implicit */ set_list(const set_list &obj);
   inline explicit set_list(isl::checked::ctx ctx, int n);
@@ -3774,12 +3776,12 @@ class space {
   friend inline space manage(__isl_take isl_space *ptr);
   friend inline space manage_copy(__isl_keep isl_space *ptr);
 
-protected:
+ protected:
   isl_space *ptr = nullptr;
 
   inline explicit space(__isl_take isl_space *ptr);
 
-public:
+ public:
   inline /* implicit */ space();
   inline /* implicit */ space(const space &obj);
   inline explicit space(isl::checked::ctx ctx, const std::string &str);
@@ -3858,12 +3860,12 @@ class union_access_info {
   friend inline union_access_info manage(__isl_take isl_union_access_info *ptr);
   friend inline union_access_info manage_copy(__isl_keep isl_union_access_info *ptr);
 
-protected:
+ protected:
   isl_union_access_info *ptr = nullptr;
 
   inline explicit union_access_info(__isl_take isl_union_access_info *ptr);
 
-public:
+ public:
   inline /* implicit */ union_access_info();
   inline /* implicit */ union_access_info(const union_access_info &obj);
   inline explicit union_access_info(isl::checked::union_map sink);
@@ -3892,12 +3894,12 @@ class union_flow {
   friend inline union_flow manage(__isl_take isl_union_flow *ptr);
   friend inline union_flow manage_copy(__isl_keep isl_union_flow *ptr);
 
-protected:
+ protected:
   isl_union_flow *ptr = nullptr;
 
   inline explicit union_flow(__isl_take isl_union_flow *ptr);
 
-public:
+ public:
   inline /* implicit */ union_flow();
   inline /* implicit */ union_flow(const union_flow &obj);
   inline union_flow &operator=(union_flow obj);
@@ -3931,12 +3933,12 @@ class union_map {
   friend inline union_map manage(__isl_take isl_union_map *ptr);
   friend inline union_map manage_copy(__isl_keep isl_union_map *ptr);
 
-protected:
+ protected:
   isl_union_map *ptr = nullptr;
 
   inline explicit union_map(__isl_take isl_union_map *ptr);
 
-public:
+ public:
   inline /* implicit */ union_map();
   inline /* implicit */ union_map(const union_map &obj);
   inline /* implicit */ union_map(isl::checked::basic_map bmap);
@@ -4055,12 +4057,12 @@ class union_pw_aff {
   friend inline union_pw_aff manage(__isl_take isl_union_pw_aff *ptr);
   friend inline union_pw_aff manage_copy(__isl_keep isl_union_pw_aff *ptr);
 
-protected:
+ protected:
   isl_union_pw_aff *ptr = nullptr;
 
   inline explicit union_pw_aff(__isl_take isl_union_pw_aff *ptr);
 
-public:
+ public:
   inline /* implicit */ union_pw_aff();
   inline /* implicit */ union_pw_aff(const union_pw_aff &obj);
   inline /* implicit */ union_pw_aff(isl::checked::aff aff);
@@ -4157,12 +4159,12 @@ class union_pw_aff_list {
   friend inline union_pw_aff_list manage(__isl_take isl_union_pw_aff_list *ptr);
   friend inline union_pw_aff_list manage_copy(__isl_keep isl_union_pw_aff_list *ptr);
 
-protected:
+ protected:
   isl_union_pw_aff_list *ptr = nullptr;
 
   inline explicit union_pw_aff_list(__isl_take isl_union_pw_aff_list *ptr);
 
-public:
+ public:
   inline /* implicit */ union_pw_aff_list();
   inline /* implicit */ union_pw_aff_list(const union_pw_aff_list &obj);
   inline explicit union_pw_aff_list(isl::checked::ctx ctx, int n);
@@ -4198,12 +4200,12 @@ class union_pw_multi_aff {
   friend inline union_pw_multi_aff manage(__isl_take isl_union_pw_multi_aff *ptr);
   friend inline union_pw_multi_aff manage_copy(__isl_keep isl_union_pw_multi_aff *ptr);
 
-protected:
+ protected:
   isl_union_pw_multi_aff *ptr = nullptr;
 
   inline explicit union_pw_multi_aff(__isl_take isl_union_pw_multi_aff *ptr);
 
-public:
+ public:
   inline /* implicit */ union_pw_multi_aff();
   inline /* implicit */ union_pw_multi_aff(const union_pw_multi_aff &obj);
   inline /* implicit */ union_pw_multi_aff(isl::checked::multi_aff ma);
@@ -4263,12 +4265,12 @@ class union_set {
   friend inline union_set manage(__isl_take isl_union_set *ptr);
   friend inline union_set manage_copy(__isl_keep isl_union_set *ptr);
 
-protected:
+ protected:
   isl_union_set *ptr = nullptr;
 
   inline explicit union_set(__isl_take isl_union_set *ptr);
 
-public:
+ public:
   inline /* implicit */ union_set();
   inline /* implicit */ union_set(const union_set &obj);
   inline /* implicit */ union_set(isl::checked::basic_set bset);
@@ -4335,12 +4337,12 @@ class union_set_list {
   friend inline union_set_list manage(__isl_take isl_union_set_list *ptr);
   friend inline union_set_list manage_copy(__isl_keep isl_union_set_list *ptr);
 
-protected:
+ protected:
   isl_union_set_list *ptr = nullptr;
 
   inline explicit union_set_list(__isl_take isl_union_set_list *ptr);
 
-public:
+ public:
   inline /* implicit */ union_set_list();
   inline /* implicit */ union_set_list(const union_set_list &obj);
   inline explicit union_set_list(isl::checked::ctx ctx, int n);
@@ -4376,12 +4378,12 @@ class val {
   friend inline val manage(__isl_take isl_val *ptr);
   friend inline val manage_copy(__isl_keep isl_val *ptr);
 
-protected:
+ protected:
   isl_val *ptr = nullptr;
 
   inline explicit val(__isl_take isl_val *ptr);
 
-public:
+ public:
   inline /* implicit */ val();
   inline /* implicit */ val(const val &obj);
   inline explicit val(isl::checked::ctx ctx, long i);
@@ -4469,12 +4471,12 @@ class val_list {
   friend inline val_list manage(__isl_take isl_val_list *ptr);
   friend inline val_list manage_copy(__isl_keep isl_val_list *ptr);
 
-protected:
+ protected:
   isl_val_list *ptr = nullptr;
 
   inline explicit val_list(__isl_take isl_val_list *ptr);
 
-public:
+ public:
   inline /* implicit */ val_list();
   inline /* implicit */ val_list(const val_list &obj);
   inline explicit val_list(isl::checked::ctx ctx, int n);
@@ -7871,9 +7873,20 @@ isl::checked::union_map basic_map::intersect_domain_wrapped_domain(const isl::ch
   return isl::checked::map(*this).intersect_domain_wrapped_domain(domain);
 }
 
+isl::checked::basic_map basic_map::intersect_params(isl::checked::basic_set bset) const
+{
+  auto res = isl_basic_map_intersect_params(copy(), bset.release());
+  return manage(res);
+}
+
 isl::checked::map basic_map::intersect_params(const isl::checked::set &params) const
 {
   return isl::checked::map(*this).intersect_params(params);
+}
+
+isl::checked::basic_map basic_map::intersect_params(const isl::checked::point &bset) const
+{
+  return this->intersect_params(isl::checked::basic_set(bset));
 }
 
 isl::checked::basic_map basic_map::intersect_range(isl::checked::basic_set bset) const

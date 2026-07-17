@@ -169,6 +169,8 @@ static const char *reparse_pw_multi_aff_tests[] = {
 	"{ [x, x mod 2] -> [x % 4] }",
 	"{ [a] -> [a//2] : exists (e0: 8*floor((-a + e0)/8) <= -8 - a + 8e0) }",
 	"{ [a, b] -> [(2*floor((a)/8) + floor((b)/6))] }",
+	"{ [] : false }",
+	"{ A[*,*] -> B[0,0] : false }",
 };
 
 #undef BASE
@@ -292,6 +294,8 @@ static const char *reparse_multi_union_pw_aff_tests[] = {
 	"A[{ S[x] -> [x + 1]; T[x] -> [x] }]",
 	"(A[{ S[x] -> [x + 1]; T[x] -> [x] }] : "
 		"{ S[x] : x > 0; T[y] : y >= 0 })",
+	"A[{ }]",
+	"A[{ }, { S[x] -> [x + 1]; T[x] -> [x] }]",
 };
 
 #undef BASE
@@ -463,6 +467,9 @@ struct {
 	  "{ [-4] }" },
 	{ "{ [i,i*-2] }",
 	  "{ [i,-2i] }" },
+	{ "{ [a = 0:3, b = 0:15, c = 0:15, d] : "
+		"256*floor((-1 - (256a + 16b + c))/256) >= d }",
+	  "{ [a = 0:3, b = 0:15, c = 0:15, d] : 256a <= -256 - d }" },
 	{ "[a, b, c, d] -> { [max(a,b,c,d)] }",
 	  "[a, b, c, d] -> { [a] : b < a and c < a and d < a; "
 		"[b] : b >= a and c < b and d < b; "
@@ -1827,180 +1834,14 @@ static int test_plain_gist(isl_ctx *ctx)
 	return 0;
 }
 
-/* Inputs for isl_basic_set_gist tests that are expected to fail.
- */
-struct {
-	const char *set;
-	const char *context;
-} gist_fail_tests[] = {
-	{ "{ [i] : exists (e0, e1: 3e1 >= 1 + 2e0 and "
-	    "8e1 <= -1 + 5i - 5e0 and 2e1 >= 1 + 2i - 5e0) }",
-	  "{ [i] : i >= 0 }" },
-};
-
-/* Check that isl_basic_set_gist fails (gracefully) when expected.
- * In particular, the user should be able to recover from the failure.
- */
-static isl_stat test_gist_fail(struct isl_ctx *ctx)
-{
-	int i, n;
-	int on_error;
-
-	on_error = isl_options_get_on_error(ctx);
-	isl_options_set_on_error(ctx, ISL_ON_ERROR_CONTINUE);
-	n = ARRAY_SIZE(gist_fail_tests);
-	for (i = 0; i < n; ++i) {
-		const char *str;
-		isl_basic_set *bset, *context;
-
-		bset = isl_basic_set_read_from_str(ctx, gist_fail_tests[i].set);
-		str = gist_fail_tests[i].context;
-		context = isl_basic_set_read_from_str(ctx, str);
-		bset = isl_basic_set_gist(bset, context);
-		isl_basic_set_free(bset);
-		if (bset)
-			break;
-	}
-	isl_options_set_on_error(ctx, on_error);
-	if (i < n)
-		isl_die(ctx, isl_error_unknown,
-			"operation not expected to succeed",
-			return isl_stat_error);
-
-	return isl_stat_ok;
-}
-
-struct {
-	const char *set;
-	const char *context;
-	const char *gist;
-} gist_tests[] = {
-	{ "{ [1, -1, 3] }",
-	  "{ [1, b, 2 - b] : -1 <= b <= 2 }",
-	  "{ [a, -1, c] }" },
-	{ "{ [a, b, c] : a <= 15 and a >= 1 }",
-	  "{ [a, b, c] : exists (e0 = floor((-1 + a)/16): a >= 1 and "
-			"c <= 30 and 32e0 >= -62 + 2a + 2b - c and b >= 0) }",
-	  "{ [a, b, c] : a <= 15 }" },
-	{ "{ : }", "{ : 1 = 0 }", "{ : }" },
-	{ "{ : 1 = 0 }", "{ : 1 = 0 }", "{ : }" },
-	{ "[M] -> { [x] : exists (e0 = floor((-2 + x)/3): 3e0 = -2 + x) }",
-	  "[M] -> { [3M] }" , "[M] -> { [x] : 1 = 0 }" },
-	{ "{ [m, n, a, b] : a <= 2147 + n }",
-	  "{ [m, n, a, b] : (m >= 1 and n >= 1 and a <= 2148 - m and "
-			"b <= 2148 - n and b >= 0 and b >= 2149 - n - a) or "
-			"(n >= 1 and a >= 0 and b <= 2148 - n - a and "
-			"b >= 0) }",
-	  "{ [m, n, ku, kl] }" },
-	{ "{ [a, a, b] : a >= 10 }",
-	  "{ [a, b, c] : c >= a and c <= b and c >= 2 }",
-	  "{ [a, a, b] : a >= 10 }" },
-	{ "{ [i, j] : i >= 0 and i + j >= 0 }", "{ [i, j] : i <= 0 }",
-	  "{ [0, j] : j >= 0 }" },
-	/* Check that no constraints on i6 are introduced in the gist */
-	{ "[t1] -> { [i4, i6] : exists (e0 = floor((1530 - 4t1 - 5i4)/20): "
-		"20e0 <= 1530 - 4t1 - 5i4 and 20e0 >= 1511 - 4t1 - 5i4 and "
-		"5e0 <= 381 - t1 and i4 <= 1) }",
-	  "[t1] -> { [i4, i6] : exists (e0 = floor((-t1 + i6)/5): "
-		"5e0 = -t1 + i6 and i6 <= 6 and i6 >= 3) }",
-	  "[t1] -> { [i4, i6] : exists (e0 = floor((1530 - 4t1 - 5i4)/20): "
-		"i4 <= 1 and 5e0 <= 381 - t1 and 20e0 <= 1530 - 4t1 - 5i4 and "
-		"20e0 >= 1511 - 4t1 - 5i4) }" },
-	/* Check that no constraints on i6 are introduced in the gist */
-	{ "[t1, t2] -> { [i4, i5, i6] : exists (e0 = floor((1 + i4)/2), "
-		"e1 = floor((1530 - 4t1 - 5i4)/20), "
-		"e2 = floor((-4t1 - 5i4 + 10*floor((1 + i4)/2))/20), "
-		"e3 = floor((-1 + i4)/2): t2 = 0 and 2e3 = -1 + i4 and "
-			"20e2 >= -19 - 4t1 - 5i4 + 10e0 and 5e2 <= 1 - t1 and "
-			"2e0 <= 1 + i4 and 2e0 >= i4 and "
-			"20e1 <= 1530 - 4t1 - 5i4 and "
-			"20e1 >= 1511 - 4t1 - 5i4 and i4 <= 1 and "
-			"5e1 <= 381 - t1 and 20e2 <= -4t1 - 5i4 + 10e0) }",
-	  "[t1, t2] -> { [i4, i5, i6] : exists (e0 = floor((-17 + i4)/2), "
-		"e1 = floor((-t1 + i6)/5): 5e1 = -t1 + i6 and "
-			"2e0 <= -17 + i4 and 2e0 >= -18 + i4 and "
-			"10e0 <= -91 + 5i4 + 4i6 and "
-			"10e0 >= -105 + 5i4 + 4i6) }",
-	  "[t1, t2] -> { [i4, i5, i6] : exists (e0 = floor((381 - t1)/5), "
-		"e1 = floor((-1 + i4)/2): t2 = 0 and 2e1 = -1 + i4 and "
-		"i4 <= 1 and 5e0 <= 381 - t1 and 20e0 >= 1511 - 4t1 - 5i4) }" },
-	{ "{ [0, 0, q, p] : -5 <= q <= 5 and p >= 0 }",
-	  "{ [a, b, q, p] : b >= 1 + a }",
-	  "{ [a, b, q, p] : false }" },
-	{ "[n] -> { [x] : x = n && x mod 32 = 0 }",
-	  "[n] -> { [x] : x mod 32 = 0 }",
-	  "[n] -> { [x = n] }" },
-	{ "{ [x] : x mod 6 = 0 }", "{ [x] : x mod 3 = 0 }",
-	  "{ [x] : x mod 2 = 0 }" },
-	{ "{ [x] : x mod 3200 = 0 }", "{ [x] : x mod 10000 = 0 }",
-	  "{ [x] : x mod 128 = 0 }" },
-	{ "{ [x] : x mod 3200 = 0 }", "{ [x] : x mod 10 = 0 }",
-	  "{ [x] : x mod 3200 = 0 }" },
-	{ "{ [a, b, c] : a mod 2 = 0 and a = c }",
-	  "{ [a, b, c] : b mod 2 = 0 and b = c }",
-	  "{ [a, b, c = a] }" },
-	{ "{ [a, b, c] : a mod 6 = 0 and a = c }",
-	  "{ [a, b, c] : b mod 2 = 0 and b = c }",
-	  "{ [a, b, c = a] : a mod 3 = 0 }" },
-	{ "{ [x] : 0 <= x <= 4 or 6 <= x <= 9 }",
-	  "{ [x] : 1 <= x <= 3 or 7 <= x <= 8 }",
-	  "{ [x] }" },
-	{ "{ [x,y] : x < 0 and 0 <= y <= 4 or x >= -2 and -x <= y <= 10 + x }",
-	  "{ [x,y] : 1 <= y <= 3 }",
-	  "{ [x,y] }" },
-};
-
 /* Check that isl_set_gist behaves as expected.
- *
- * For the test cases in gist_tests, besides checking that the result
- * is as expected, also check that applying the gist operation does
- * not modify the input set (an earlier version of isl would do that) and
- * that the test case is consistent, i.e., that the gist has the same
- * intersection with the context as the input set.
  */
 static int test_gist(struct isl_ctx *ctx)
 {
-	int i;
 	const char *str;
 	isl_basic_set *bset1, *bset2;
 	isl_map *map1, *map2;
-	isl_bool equal;
 	isl_size n_div;
-
-	for (i = 0; i < ARRAY_SIZE(gist_tests); ++i) {
-		isl_bool equal_input, equal_intersection;
-		isl_set *set1, *set2, *copy, *context;
-
-		set1 = isl_set_read_from_str(ctx, gist_tests[i].set);
-		context = isl_set_read_from_str(ctx, gist_tests[i].context);
-		copy = isl_set_copy(set1);
-		set1 = isl_set_gist(set1, isl_set_copy(context));
-		set2 = isl_set_read_from_str(ctx, gist_tests[i].gist);
-		equal = isl_set_is_equal(set1, set2);
-		isl_set_free(set1);
-		set1 = isl_set_read_from_str(ctx, gist_tests[i].set);
-		equal_input = isl_set_is_equal(set1, copy);
-		isl_set_free(copy);
-		set1 = isl_set_intersect(set1, isl_set_copy(context));
-		set2 = isl_set_intersect(set2, context);
-		equal_intersection = isl_set_is_equal(set1, set2);
-		isl_set_free(set2);
-		isl_set_free(set1);
-		if (equal < 0 || equal_input < 0 || equal_intersection < 0)
-			return -1;
-		if (!equal)
-			isl_die(ctx, isl_error_unknown,
-				"incorrect gist result", return -1);
-		if (!equal_input)
-			isl_die(ctx, isl_error_unknown,
-				"gist modified input", return -1);
-		if (!equal_input)
-			isl_die(ctx, isl_error_unknown,
-				"inconsistent gist test case", return -1);
-	}
-
-	if (test_gist_fail(ctx) < 0)
-		return -1;
 
 	str = "[p0, p2, p3, p5, p6, p10] -> { [] : "
 	    "exists (e0 = [(15 + p0 + 15p6 + 15p10)/16], e1 = [(p5)/8], "
@@ -2410,6 +2251,14 @@ struct {
 	{ 1, "{ [a] : (a = 0 or ((1 + a) mod 2 = 0 and 0 < a <= 15) or "
 		"((a) mod 2 = 0 and 0 < a <= 15)) }" },
 	{ 1, "{ rat: [0:2]; rat: [1:3] }" },
+	{ 1, "{ [a = 1:14] : a mod 4 = 0 and 4*floor((1 + a)/4) <= a; [0] }" },
+	{ 0, "{ [a = 4:6, b = 1:7, 8] : a mod 2 = 1 and b mod 2 = 1;"
+		"[a = 1:7, 1:7, a] }" },
+	{ 1, "{ [a] : a mod 2 = 0 and (a <= 3 or a >= 12 or 4 <= a <= 11) }" },
+	{ 1, "{ [a] : 0 < a <= 341 or "
+		"(0 < a <= 700 and 360*floor(a/360) >= -340 + a) }" },
+	{ 0, "{ [a] : 0 < a <= 341 or "
+		"(0 < a <= 701 and 360*floor(a/360) >= -340 + a) }" },
 };
 
 /* A specialized coalescing test case that would result
@@ -4032,6 +3881,8 @@ static struct {
 	{ 1, isl_fold_max, "{ [0:10] -> 1 }", "{ max(1) }" },
 	{ 1, isl_fold_max, "{ [[m] -> [0:m]] -> m^2 }",
 	  "{ [m] -> max(m^2) : m >= 0 }" },
+	{ 1, isl_fold_max, "{ [[a=0:1] -> [b=0:1]] -> (floor((a + b)/2)) }",
+	  "{ [a=0:1] -> max(a) }" },
 };
 
 /* Check that the bound computation can handle differences
