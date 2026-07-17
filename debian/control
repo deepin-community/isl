@@ -4,9 +4,9 @@ Maintainer: Debian GCC Maintainers <debian-gcc@lists.debian.org>
 Uploaders: Matthias Klose <doko@debian.org>
 Build-Depends: debhelper (>= 11),
   libgmp-dev, python3:any
-Standards-Version: 4.6.0
+Standards-Version: 4.7.0
 Section: libs
-Homepage: http://isl.gforge.inria.fr/
+Homepage: https://openhub.net/p/isl
 
 Package: libisl-dev
 Section: libdevel

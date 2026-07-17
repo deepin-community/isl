@@ -1,3 +1,12 @@
+isl (0.27-1) unstable; urgency=medium
+
+  * New upstream version.
+  * Bump standards version.
+  * Update home page.
+  * Update symbols file.
+
+ -- Matthias Klose <doko@debian.org>  Mon, 09 Sep 2024 14:42:47 +0200
+
 isl (0.26-3) unstable; urgency=medium
 
   * Configure --without-gcc-arch.

@@ -1379,8 +1379,7 @@ static isl_bool is_linear_div_constraint(__isl_keep isl_local_space *ls,
 	} else {
 		return isl_bool_false;
 	}
-	if (isl_seq_first_non_zero(constraint + pos + 1,
-				    ls->div->n_row - div - 1) != -1)
+	if (isl_seq_any_non_zero(constraint + pos + 1, ls->div->n_row - div - 1))
 		return isl_bool_false;
 	return isl_bool_true;
 }
@@ -1454,9 +1453,10 @@ isl_bool isl_local_space_is_div_equality(__isl_keep isl_local_space *ls,
 	return isl_bool_ok(sign < 0);
 }
 
-/*
- * Set active[i] to 1 if the dimension at position i is involved
- * in the linear expression l.
+/* Return an array of integers, one for each variable of "ls",
+ * with entry i set to 1 if the variable at position i is involved
+ * in the linear expression "l".  This includes variables that appear
+ * in the definition of local variables that appear in "l".
  */
 int *isl_local_space_get_active(__isl_keep isl_local_space *ls, isl_int *l)
 {

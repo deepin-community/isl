@@ -697,34 +697,42 @@ unsigned isl_qpolynomial_domain_offset(__isl_keep isl_qpolynomial *qp,
 	}
 }
 
+/* Return the polynomial expression of "qp".
+ */
+static __isl_keep isl_poly *isl_qpolynomial_peek_poly(
+	__isl_keep isl_qpolynomial *qp)
+{
+	return qp ? qp->poly : NULL;
+}
+
 isl_bool isl_qpolynomial_is_zero(__isl_keep isl_qpolynomial *qp)
 {
-	return qp ? isl_poly_is_zero(qp->poly) : isl_bool_error;
+	return isl_poly_is_zero(isl_qpolynomial_peek_poly(qp));
 }
 
 isl_bool isl_qpolynomial_is_one(__isl_keep isl_qpolynomial *qp)
 {
-	return qp ? isl_poly_is_one(qp->poly) : isl_bool_error;
+	return isl_poly_is_one(isl_qpolynomial_peek_poly(qp));
 }
 
 isl_bool isl_qpolynomial_is_nan(__isl_keep isl_qpolynomial *qp)
 {
-	return qp ? isl_poly_is_nan(qp->poly) : isl_bool_error;
+	return isl_poly_is_nan(isl_qpolynomial_peek_poly(qp));
 }
 
 isl_bool isl_qpolynomial_is_infty(__isl_keep isl_qpolynomial *qp)
 {
-	return qp ? isl_poly_is_infty(qp->poly) : isl_bool_error;
+	return isl_poly_is_infty(isl_qpolynomial_peek_poly(qp));
 }
 
 isl_bool isl_qpolynomial_is_neginfty(__isl_keep isl_qpolynomial *qp)
 {
-	return qp ? isl_poly_is_neginfty(qp->poly) : isl_bool_error;
+	return isl_poly_is_neginfty(isl_qpolynomial_peek_poly(qp));
 }
 
 int isl_qpolynomial_sgn(__isl_keep isl_qpolynomial *qp)
 {
-	return qp ? isl_poly_sgn(qp->poly) : 0;
+	return isl_poly_sgn(isl_qpolynomial_peek_poly(qp));
 }
 
 static void poly_free_cst(__isl_take isl_poly_cst *cst)
@@ -1436,7 +1444,7 @@ __isl_give isl_qpolynomial *isl_qpolynomial_copy(__isl_keep isl_qpolynomial *qp)
  */
 __isl_give isl_poly *isl_qpolynomial_get_poly(__isl_keep isl_qpolynomial *qp)
 {
-	return qp ? isl_poly_copy(qp->poly) : NULL;
+	return isl_poly_copy(isl_qpolynomial_peek_poly(qp));
 }
 
 /* Return the polynomial expression of "qp".
@@ -2130,16 +2138,15 @@ isl_bool isl_qpolynomial_is_cst(__isl_keep isl_qpolynomial *qp,
 	isl_int *n, isl_int *d)
 {
 	isl_bool is_cst;
+	isl_poly *poly;
 	isl_poly_cst *cst;
 
-	if (!qp)
-		return isl_bool_error;
-
-	is_cst = isl_poly_is_cst(qp->poly);
+	poly = isl_qpolynomial_peek_poly(qp);
+	is_cst = isl_poly_is_cst(poly);
 	if (is_cst < 0 || !is_cst)
 		return is_cst;
 
-	cst = isl_poly_as_cst(qp->poly);
+	cst = isl_poly_as_cst(poly);
 	if (!cst)
 		return isl_bool_error;
 
@@ -2183,10 +2190,7 @@ static __isl_give isl_val *isl_poly_get_constant_val(__isl_keep isl_poly *poly)
 __isl_give isl_val *isl_qpolynomial_get_constant_val(
 	__isl_keep isl_qpolynomial *qp)
 {
-	if (!qp)
-		return NULL;
-
-	return isl_poly_get_constant_val(qp->poly);
+	return isl_poly_get_constant_val(isl_qpolynomial_peek_poly(qp));
 }
 
 isl_bool isl_poly_is_affine(__isl_keep isl_poly *poly)
@@ -2216,6 +2220,14 @@ isl_bool isl_poly_is_affine(__isl_keep isl_poly *poly)
 	return isl_poly_is_affine(rec->p[0]);
 }
 
+/* Can "qp" be converted to an isl_aff?
+ * That is, does it represent a quasi-affine expression?
+ */
+isl_bool isl_qpolynomial_isa_aff(__isl_keep isl_qpolynomial *qp)
+{
+	return isl_poly_is_affine(isl_qpolynomial_peek_poly(qp));
+}
+
 isl_bool isl_qpolynomial_is_affine(__isl_keep isl_qpolynomial *qp)
 {
 	if (!qp)
@@ -2224,7 +2236,7 @@ isl_bool isl_qpolynomial_is_affine(__isl_keep isl_qpolynomial *qp)
 	if (qp->div->n_row > 0)
 		return isl_bool_false;
 
-	return isl_poly_is_affine(qp->poly);
+	return isl_qpolynomial_isa_aff(qp);
 }
 
 static void update_coeff(__isl_keep isl_vec *aff,
@@ -2419,7 +2431,7 @@ __isl_give isl_qpolynomial *isl_qpolynomial_var_on_domain(
 {
 	isl_size off;
 
-	if (isl_space_check_is_set(domain ) < 0)
+	if (isl_space_check_is_set(domain) < 0)
 		goto error;
 	if (isl_space_check_range(domain, type, pos, 1) < 0)
 		goto error;
@@ -2851,7 +2863,7 @@ static isl_stat set_active(__isl_keep isl_qpolynomial *qp, int *active)
 			break;
 		}
 
-	return poly_set_active(qp->poly, active, d);
+	return poly_set_active(isl_qpolynomial_peek_poly(qp), active, d);
 }
 
 #undef TYPE
@@ -2935,7 +2947,7 @@ static __isl_give isl_qpolynomial *remove_redundant_divs(
 	if (!active)
 		goto error;
 
-	if (poly_set_active(qp->poly, active, len) < 0)
+	if (poly_set_active(isl_qpolynomial_peek_poly(qp), active, len) < 0)
 		goto error;
 
 	for (i = qp->div->n_row - 1; i >= 0; --i) {
@@ -3991,7 +4003,7 @@ __isl_give isl_qpolynomial *isl_qpolynomial_coeff(
 	type = domain_type(type);
 
 	g_pos = pos(qp->dim, type) + t_pos;
-	poly = isl_poly_coeff(qp->poly, g_pos, deg);
+	poly = isl_poly_coeff(isl_qpolynomial_peek_poly(qp), g_pos, deg);
 
 	c = isl_qpolynomial_alloc(isl_space_copy(qp->dim),
 				qp->div->n_row, poly);
@@ -4380,7 +4392,8 @@ isl_stat isl_qpolynomial_foreach_term(__isl_keep isl_qpolynomial *qp,
 	if (!term)
 		return isl_stat_error;
 
-	term = isl_poly_foreach_term(qp->poly, fn, term, user);
+	term = isl_poly_foreach_term(isl_qpolynomial_peek_poly(qp),
+					fn, term, user);
 
 	isl_term_free(term);
 
@@ -4565,10 +4578,10 @@ __isl_give isl_val *isl_qpolynomial_opt_on_domain(
 	struct isl_opt_data data = { NULL, 1, NULL, max };
 	isl_bool is_cst;
 
-	if (!set || !qp)
+	if (!set)
 		goto error;
 
-	is_cst = isl_poly_is_cst(qp->poly);
+	is_cst = isl_poly_is_cst(isl_qpolynomial_peek_poly(qp));
 	if (is_cst < 0)
 		goto error;
 	if (is_cst) {
@@ -4876,8 +4889,8 @@ static isl_stat split_periods(__isl_take isl_set *set,
 	for (i = 0; i < qp->div->n_row; ++i) {
 		enum isl_lp_result lp_res;
 
-		if (isl_seq_first_non_zero(qp->div->row[i] + 2 + div_pos,
-						qp->div->n_row) != -1)
+		if (isl_seq_any_non_zero(qp->div->row[i] + 2 + div_pos,
+						qp->div->n_row))
 			continue;
 
 		lp_res = isl_set_solve_lp(set, 0, qp->div->row[i] + 1,
@@ -5388,18 +5401,16 @@ __isl_give isl_union_pw_qpolynomial *isl_union_pw_qpolynomial_to_polynomial(
 				   &poly_entry, &sign);
 }
 
-__isl_give isl_basic_map *isl_basic_map_from_qpolynomial(
-	__isl_take isl_qpolynomial *qp)
+/* Return an isl_aff that is equivalent to "qp".
+ */
+__isl_give isl_aff *isl_qpolynomial_as_aff(__isl_take isl_qpolynomial *qp)
 {
 	isl_local_space *ls;
 	isl_vec *vec;
 	isl_aff *aff;
-	isl_basic_map *bmap;
 	isl_bool is_affine;
 
-	if (!qp)
-		return NULL;
-	is_affine = isl_poly_is_affine(qp->poly);
+	is_affine = isl_qpolynomial_isa_aff(qp);
 	if (is_affine < 0)
 		goto error;
 	if (!is_affine)
@@ -5408,10 +5419,15 @@ __isl_give isl_basic_map *isl_basic_map_from_qpolynomial(
 	ls = isl_qpolynomial_get_domain_local_space(qp);
 	vec = isl_qpolynomial_extract_affine(qp);
 	aff = isl_aff_alloc_vec(ls, vec);
-	bmap = isl_basic_map_from_aff(aff);
 	isl_qpolynomial_free(qp);
-	return bmap;
+	return aff;
 error:
 	isl_qpolynomial_free(qp);
 	return NULL;
+}
+
+__isl_give isl_basic_map *isl_basic_map_from_qpolynomial(
+	__isl_take isl_qpolynomial *qp)
+{
+	return isl_basic_map_from_aff(isl_qpolynomial_as_aff(qp));
 }

@@ -20698,9 +20698,94 @@ as_fn_error $? "unable to link against libclang-cpp
 See \`config.log' for more details" "$LINENO" 5; }
 fi
 else
-	CLANG_LIBS="-lclangBasic -lclangDriver $CLANG_LIBS"
+
+	LIBS="$CLANG_LIBS $SAVE_LIBS"
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for main in -lclangSupport" >&5
+printf %s "checking for main in -lclangSupport... " >&6; }
+if test ${ac_cv_lib_clangSupport_main+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lclangSupport  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+namespace conftest {
+  extern "C" int main ();
+}
+int
+main (void)
+{
+return conftest::main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+  ac_cv_lib_clangSupport_main=yes
+else $as_nop
+  ac_cv_lib_clangSupport_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_clangSupport_main" >&5
+printf "%s\n" "$ac_cv_lib_clangSupport_main" >&6; }
+if test "x$ac_cv_lib_clangSupport_main" = xyes
+then :
+  CLANG_LIBS="-lclangSupport $CLANG_LIBS"
+fi
+
+
+	CLANG_LIBS="-lclangDriver -lclangBasic $CLANG_LIBS"
+
+	LIBS="$CLANG_LIBS $SAVE_LIBS"
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for main in -lclangASTMatchers" >&5
+printf %s "checking for main in -lclangASTMatchers... " >&6; }
+if test ${ac_cv_lib_clangASTMatchers_main+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lclangASTMatchers  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+namespace conftest {
+  extern "C" int main ();
+}
+int
+main (void)
+{
+return conftest::main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+  ac_cv_lib_clangASTMatchers_main=yes
+else $as_nop
+  ac_cv_lib_clangASTMatchers_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_clangASTMatchers_main" >&5
+printf "%s\n" "$ac_cv_lib_clangASTMatchers_main" >&6; }
+if test "x$ac_cv_lib_clangASTMatchers_main" = xyes
+then :
+  CLANG_LIBS="-lclangASTMatchers $CLANG_LIBS"
+fi
+
+
 	CLANG_LIBS="-lclangAnalysis -lclangAST -lclangLex $CLANG_LIBS"
-	LDFLAGS="$CLANG_LDFLAGS $CLANG_LIBS $SAVE_LDFLAGS"
+
+	LIBS="$CLANG_LIBS $SAVE_LIBS"
 	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for main in -lclangEdit" >&5
 printf %s "checking for main in -lclangEdit... " >&6; }
 if test ${ac_cv_lib_clangEdit_main+y}
@@ -20737,10 +20822,52 @@ fi
 printf "%s\n" "$ac_cv_lib_clangEdit_main" >&6; }
 if test "x$ac_cv_lib_clangEdit_main" = xyes
 then :
-  LIB_CLANG_EDIT=-lclangEdit
+  CLANG_LIBS="-lclangEdit $CLANG_LIBS"
 fi
 
-	CLANG_LIBS="$LIB_CLANG_EDIT $CLANG_LIBS"
+
+
+	LIBS="$CLANG_LIBS $SAVE_LIBS"
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for main in -lclangAPINotes" >&5
+printf %s "checking for main in -lclangAPINotes... " >&6; }
+if test ${ac_cv_lib_clangAPINotes_main+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lclangAPINotes  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+namespace conftest {
+  extern "C" int main ();
+}
+int
+main (void)
+{
+return conftest::main ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"
+then :
+  ac_cv_lib_clangAPINotes_main=yes
+else $as_nop
+  ac_cv_lib_clangAPINotes_main=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_clangAPINotes_main" >&5
+printf "%s\n" "$ac_cv_lib_clangAPINotes_main" >&6; }
+if test "x$ac_cv_lib_clangAPINotes_main" = xyes
+then :
+  CLANG_LIBS="-lclangAPINotes $CLANG_LIBS"
+fi
+
+
 	CLANG_LIBS="-lclangParse -lclangSema $CLANG_LIBS"
 	CLANG_LIBS="-lclangFrontend -lclangSerialization $CLANG_LIBS"
 fi

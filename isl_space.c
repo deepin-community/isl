@@ -93,6 +93,23 @@ isl_stat isl_space_check_is_set(__isl_keep isl_space *space)
 	return isl_stat_ok;
 }
 
+/* Check that "space" is a proper set space,
+ * i.e., the space of a set that is not a parameter domain.
+ */
+isl_stat isl_space_check_is_proper_set(__isl_keep isl_space *space)
+{
+	isl_bool is_params, is_set;
+
+	is_params = isl_space_is_params(space);
+	is_set = isl_space_is_set(space);
+	if (is_params < 0 || is_set < 0)
+		return isl_stat_error;
+	if (is_params || !is_set)
+		isl_die(isl_space_get_ctx(space), isl_error_invalid,
+			"space is not a proper set", return isl_stat_error);
+	return isl_stat_ok;
+}
+
 /* Is the given space that of a map?
  */
 isl_bool isl_space_is_map(__isl_keep isl_space *space)
@@ -2420,7 +2437,7 @@ __isl_give isl_space *isl_space_bind_set(__isl_take isl_space *space,
 {
 	isl_space *tuple_space;
 
-	if (isl_space_check_is_set(space) < 0)
+	if (isl_space_check_is_proper_set(space) < 0)
 		return isl_space_free(space);
 	tuple_space = isl_multi_id_peek_space(tuple);
 	if (isl_space_check_equal_tuples(tuple_space, space) < 0)
