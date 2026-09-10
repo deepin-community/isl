@@ -1,3 +1,9 @@
+isl (0.27-2) unstable; urgency=medium
+
+  * Rebuild with LTO enabled (dpkg vendor feature optimize/lto).
+
+ -- tunaichao <tunaichao@uniontech.com>  Thu, 10 Sep 2026 17:41:50 +0800
+
 isl (0.27-1) unstable; urgency=medium
 
   * New upstream version.
